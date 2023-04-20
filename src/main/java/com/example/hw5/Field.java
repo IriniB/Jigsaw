@@ -2,7 +2,9 @@ package com.example.hw5;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,178 +13,180 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Field {
-    AnchorPane anchorPane;
-    Figure figure;
-    GridPane gridPane;
-    StackPane[][] cells;
-    int movesCounter;
-    public int passedSeconds = 0;
-    Button finishGameBtn;
-    Label timeLabel;
-
-    public Field(Stage stage) {
-        movesCounter = 0;
-        FlowPane flowPaneFirst = createFirstPane();
-        FlowPane flowPaneSecond = createSecondPane(stage);
-
-        flowPaneFirst.getChildren().add(flowPaneSecond);
-        VBox root = new VBox();
-        root.getChildren().addAll(flowPaneFirst);
-        Scene scene = new Scene(root,577,615);
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.show();
-    }
+    /**
+     * Размер по оси Х.
+     */
+    public static final int SIZE_CELL_ON_FIELD_X = 66;
+    /**
+     * Размер по оси У.
+     */
+    public static final int SIZE_CELL_ON_FIELD_Y = 65;
+    /**
+     * Размер (количество клеток) по оси Х.
+     */
+    public static final int SIZE_X = 9;
+    /**
+     * Размер (количество клеток) по оси У.
+     */
+    public static final int SIZE_Y = 9;
+    // Колонки и строки.
+    private final ColumnConstraints COLUMN_CONSTRAINTS = new ColumnConstraints(10, 75, Region.USE_COMPUTED_SIZE, Priority.SOMETIMES, HPos.CENTER, true);
+    private final RowConstraints ROW_CONSTRAINTS = new RowConstraints(10, 75, Region.USE_COMPUTED_SIZE, Priority.SOMETIMES, VPos.CENTER, true);
+    // Поле.
+    private GridPane gridPaneField;
+    // Массив всех ячеек.
+    private ArrayList<ArrayList<Cell>> allCells = new ArrayList<>();
+    private boolean isOpacity = false;
 
     /**
-     Создаем основную часть окна с игровым полем.
-     @return Созданную панель со всеми элементами.
+     * Конструктор поля.
      */
-    private FlowPane createFirstPane() {
-        anchorPane = new AnchorPane();
-        anchorPane.setVisible(true);
-        anchorPane.setPrefSize(457,616);
-        anchorPane.setMaxSize(457,616);
-        anchorPane.setMinSize(457,616);
-        createCells();
+    public Field() {
+        gridPaneField = new GridPane();
+        for (int i = 0; i < SIZE_X; i++) {
+            gridPaneField.getRowConstraints().add(ROW_CONSTRAINTS);
+        }
+        for (int i = 0; i < SIZE_Y; i++) {
+            gridPaneField.getColumnConstraints().add(COLUMN_CONSTRAINTS);
+        }
         createField();
-        colorField();
-        figure = new Figure();
-        Random random = new Random();
-        figure.createFigure(random.nextInt(0, 31));
-        anchorPane.getChildren().add(figure.figureType.body);
-        setFieldActions();
-        FlowPane flowPane = new FlowPane();
-        flowPane.setOrientation(Orientation.HORIZONTAL);
-        flowPane.getChildren().add(anchorPane);
-        flowPane.setHgap(7);
-        return flowPane;
     }
 
     /**
-     Создаем массив панелей для игрового поля.
+     * Конструктор поля.
+     * @param gridPaneField панель поля
      */
-    private void createCells() {
-        cells = new StackPane[9][9];
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                cells[i][j] = new StackPane();
-                cells[i][j].setPrefSize(50.5, 50.5);
-                cells[i][j].setBorder(new Border(new BorderStroke(Color.BLACK,
-                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.5))));
+    public Field(GridPane gridPaneField) {
+        this.gridPaneField = gridPaneField;
+        createField();
+    }
+
+    /**
+     * Получение панели.
+     * @return панель
+     */
+    public GridPane getGridPaneField() {
+        return gridPaneField;
+    }
+
+    /**
+     * Задание панели.
+     * @param gridPaneField панель
+     */
+    public void setGridPaneField(GridPane gridPaneField) {
+        this.gridPaneField = gridPaneField;
+    }
+
+    /**
+     * Получение всех клеток.
+     * @return все клетки
+     */
+    public ArrayList<ArrayList<Cell>> getAllCells() {
+        return allCells;
+    }
+
+    /**
+     * Получение клетки по позиции.
+     * @param pozX координата по оси Х
+     * @param pozY координата по оси У
+     * @return клетка на заданных координатах
+     */
+    public Cell getCell(int pozX, int pozY) {
+        return allCells.get(pozY).get(pozX);
+    }
+
+    /**
+     * Получение прозрачности.
+     * @return true - прозрачно, false - иначе
+     */
+    public boolean isOpacity() {
+        return isOpacity;
+    }
+
+    /**
+     * Задание флага прозрачности.
+     * @param opacity флаг прозрачности
+     */
+    public void setOpacity(boolean opacity) {
+        isOpacity = opacity;
+    }
+
+    /**
+     * Задание всех ячеек.
+     * @param allCells пассив ячеек
+     */
+    public void setAllCells(ArrayList<ArrayList<Cell>> allCells) {
+        this.allCells = allCells;
+    }
+
+    /**
+     * Метод проверяющий активность указанной ячейки поля.
+     * @param pozX координата по оси Х
+     * @param pozY координата по оси У
+     * @return true - активна, false - иначе
+     */
+    public boolean isCellActive(int pozX, int pozY) {
+        Cell cell = allCells.get(pozY).get(pozX);
+        return cell.isActive();
+    }
+
+    /**
+     * Метод создания поля.
+     */
+    public void createField() {
+        for (int i = 0; i < SIZE_X; i++) {
+            ArrayList<Cell> list = new ArrayList<>();
+            for (int j = 0; j < SIZE_Y; j++) {
+                Cell cell = new Cell(j, i);
+                cell.setActive(false);
+                list.add(cell);
+                gridPaneField.add(cell, j, i);
             }
+            allCells.add(list);
         }
     }
 
     /**
-     Создаем игровое поле.
+     * Метод возвращения ячеек в исходное состояние до взаимодействия.
      */
-    private void createField() {
-        gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                gridPane.add(cells[i][j], i, j);
-            }
-        }
-        anchorPane.getChildren().add(gridPane);
-    }
-
-    /**
-     Раскрашиваем игровое поле.
-     */
-    private void colorField() {
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                if (((i >= 3 && i < 6) && (j < 3 || j >= 6)) ||
-                        ((j >= 3 && j < 6) && (i < 3 || i >= 6))) {
-                    cells[i][j].setStyle("-fx-background-color: #E4E7EF");
-                } else {
-                    cells[i][j].setStyle("-fx-background-color: #FFFFFF");
+    public void allDelOpacity() {
+        if (isOpacity)
+            for (int i = 0; i < allCells.size(); i++) {
+                for (int j = 0; j < allCells.get(i).size(); j++) {
+                    Cell cell = allCells.get(i).get(j);
+                    if (!cell.isActive()) {
+                        cell.setOpacity(false);
+                        cell.setBackgroundActive(false);
+                    }
                 }
             }
+    }
+
+    /**
+     * Метод устанавливающий активность всех ячеек.
+     * @param active флаг активности
+     */
+    public void allActive(boolean active) {
+        for (int i = 0; i < allCells.size(); i++) {
+            for (int j = 0; j < allCells.get(i).size(); j++) {
+                allCells.get(i).get(j).setActive(active);
+            }
         }
     }
 
     /**
-     Задаем события при нажатии на поле.
+     * Установка всех ячеек в неактивное состояние.
      */
-    private void setFieldActions() {
-        anchorPane.setOnMouseReleased(mouseEvent -> {
-            if (figure.figureType.canMoveFigure) {
-                anchorPane.getChildren().remove(figure.figureType.body);
-                if (figure.figureType.trySetFigure(cells, mouseEvent)) {
-                    Random random = new Random();
-                    figure.createFigure(random.nextInt(0, 31));
-                    ++movesCounter;
-                } else {
-                    figure.createFigure(figure.lastType);
-                    colorField();
-                }
-                anchorPane.getChildren().add(figure.figureType.body);
-            }
-        });
-
-        anchorPane.setOnMousePressed(mouseEvent -> figure.figureType.setPressedSquareNumber(mouseEvent));
-
-        anchorPane.setOnMouseDragged(mouseEvent -> {
-            colorField();
-            if (figure.figureType.canMoveFigure) {
-                figure.figureType.colorCells(cells, mouseEvent);
-            }
-        });
-    }
-
-    /**
-     Создаем часть окна с кнопкой завершения игры и счетчиком секунд.
-     @return Созданную панель со всеми элементами.
-     */
-    private FlowPane createSecondPane(Stage stage) {
-        FlowPane flowPaneSecond = new FlowPane();
-        flowPaneSecond.setOrientation(Orientation.VERTICAL);
-        flowPaneSecond.setStyle("-fx-background-color: #f4f4f4");
-        flowPaneSecond.setPrefSize(112,616);
-        flowPaneSecond.setMaxSize(112,616);
-        flowPaneSecond.setMinSize(112,616);
-
-        createFinishGameBtn(stage);
-        flowPaneSecond.getChildren().add(finishGameBtn);
-
-        createTimeLabel();
-        flowPaneSecond.getChildren().add(timeLabel);
-        return flowPaneSecond;
-    }
-
-    /**
-     Создаем кнопу для завершения игры.
-     */
-    private void createFinishGameBtn(Stage stage) {
-        finishGameBtn = new Button();
-        finishGameBtn.setText("Завершить\nигру");
-        finishGameBtn.setPrefSize(100, 70);
-        finishGameBtn.setFont(Font.font(15));
-
-        finishGameBtn.setOnAction(actionEvent -> new StartingMenu(stage, passedSeconds,movesCounter));
-    }
-
-    /**
-     Отображение времени игры в секундах на поле.
-     */
-    private void createTimeLabel() {
-        timeLabel = new Label();
-        timeLabel.setPrefSize(100, 70);
-        timeLabel.setFont(Font.font(20));
-
-        Timeline fiveSecondsWonder = new Timeline(
-                new KeyFrame(Duration.seconds(1),
-                        event -> {
-                            timeLabel.setText(Integer.toString(passedSeconds));
-                            ++passedSeconds;
-                        }));
-        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-        fiveSecondsWonder.play();
+    public void delActiveCell() {
+        for (int i = 1; i < gridPaneField.getChildren().size(); i++) {
+            Cell cell = (Cell) gridPaneField.getChildren().get(i);
+            cell.setBackground(Cell.BACKGROUND_PASSIVE_CELL);
+            cell.setBorder(Cell.BORDER_PASSIVE_CELL);
+        }
     }
 }

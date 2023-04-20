@@ -1,48 +1,165 @@
 package com.example.hw5;
 
-public class Figure {
-    protected FigureType figureType;
-    /* Сохраняем последний тип созданной фигуры, чтобы при некорректной попытке ее расположить на поле,
-    снова генерировалась такая же фигура. */
-    int lastType;
+import javafx.geometry.HPos;
+import javafx.geometry.Point2D;
+import javafx.geometry.VPos;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
-    public void createFigure(int type) {
-        lastType = type;
-        switch (type) {
-            case 0 -> figureType = new FigureJRight();
-            case 1 -> figureType = new FigureJUp();
-            case 2 -> figureType = new FigureJLeft();
-            case 3 -> figureType = new FigureJDown();
-            case 4 -> figureType = new FigureLLeft();
-            case 5 -> figureType = new FigureLUp();
-            case 6 -> figureType = new FigureLRight();
-            case 7 -> figureType = new FigureLDown();
-            case 8 -> figureType = new FigureSUp();
-            case 9 -> figureType = new FigureSRight();
-            case 10 -> figureType = new FigureZUp();
-            case 11 -> figureType = new FigureZLeft();
-            case 12 -> figureType = new FigureLongLUp();
-            case 13 -> figureType = new FigureLongLRight();
-            case 14 -> figureType = new FigureLongLDown();
-            case 15 -> figureType = new FigureLongLLeft();
-            case 16 -> figureType = new FigureIRight();
-            case 17 -> figureType = new FigureIUp();
-            case 18 -> figureType = new FigurePoint();
-            case 19 -> figureType = new FigureLongTUp();
-            case 20 -> figureType = new FigureLongTDown();
-            case 21 -> figureType = new FigureLongTRight();
-            case 22 -> figureType = new FigureLongTLeft();
-            case 23 -> figureType = new FigureShortLDown();
-            case 24 -> figureType = new FigureShortLLeft();
-            case 25 -> figureType = new FigureShortLUp();
-            case 26 -> figureType = new FigureShortLRight();
-            case 27 -> figureType = new FigureShortTRight();
-            case 28 -> figureType = new FigureShortTDown();
-            case 29 -> figureType = new FigureShortTLeft();
-            case 30 -> figureType = new FigureShortTUp();
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Figure extends GridPane {
+    /**
+     * Начальное положение по оси Х.
+     */
+    public static final int START_LAYOUT_X = 650;
+    /**
+     * Начальное положение по оси У.
+     */
+    public static final int START_LAYOUT_Y = 76;
+    /**
+     * Размеры фигуры.
+     */
+    public static final int SIZE_X = 195;
+    public static final int SIZE_Y = 195;
+    // Колонки и строки фигуры.
+    private final ColumnConstraints COLUMN_CONSTRAINTS = new ColumnConstraints(10, 75, Region.USE_COMPUTED_SIZE, Priority.SOMETIMES, HPos.CENTER, true);
+    private final RowConstraints ROW_CONSTRAINTS = new RowConstraints(10, 75, Region.USE_COMPUTED_SIZE, Priority.SOMETIMES, VPos.CENTER, true);
+    // Координаты фигуры.
+    private int pozX;
+    private int pozY;
+    // Массив активных клеток.
+    private ArrayList<Cell> allActiveCells = new ArrayList<>();
+    // Массив неактивных клеток.
+    private ArrayList<Cell> allPassiveCells = new ArrayList<>();
+    private Random rand = new Random();
+
+
+    /**
+     * Конструктор фигуры.
+     * @param pozX координата по оси Х
+     * @param pozY координата по оси У
+     */
+    public Figure(int pozX, int pozY) {
+        this.pozX = pozX;
+        this.pozY = pozY;
+        for (int i = 0; i < 3; i++) {
+            this.getColumnConstraints().add(COLUMN_CONSTRAINTS);
+            this.getRowConstraints().add(ROW_CONSTRAINTS);
         }
-        // Делаем, чтобы фигуру можно было перетаскивать.
-        DraggableMaker draggableMaker = new DraggableMaker();
-        draggableMaker.makeDraggable(figureType.body);
+        this.setPrefSize(SIZE_X, SIZE_Y);
+        this.setStyle("");
+        setStartLayout();
+    }
+
+    /**
+     * Конструктор фигуры.
+     * @param pozX координата по оси Х
+     * @param pozY координата по оси У
+     * @param figure фигура
+     */
+    public Figure(int pozX, int pozY, int[][] figure) {
+        this.pozX = pozX;
+        this.pozY = pozY;
+        for (int i = 0; i < 3; i++) {
+            this.getColumnConstraints().add(COLUMN_CONSTRAINTS);
+            this.getRowConstraints().add(ROW_CONSTRAINTS);
+        }
+        this.setPrefSize(SIZE_X, SIZE_Y);
+        this.setStyle("");
+        setStartLayout();
+        createFigure(figure);
+    }
+
+    /**
+     * Задание позиции по оси Х.
+     * @param pozX координата по оси Х
+     */
+    public void setPozX(int pozX) {
+        this.pozX = pozX;
+    }
+
+    /**
+     * Задание позиции по оси У.
+     * @param pozY координата по оси У
+     */
+    public void setPozY(int pozY) {
+        this.pozY = pozY;
+    }
+
+    /**
+     * Получение позиции по оси Х.
+     * @return позиция по оси Х
+     */
+    public int getPozX() {
+        return pozX;
+    }
+
+    /**
+     * Получение позиции по оси У.
+     * @return позиция по оси У
+     */
+    public int getPozY() {
+        return pozY;
+    }
+
+    /**
+     * Возврат активных клеток.
+     * @return массив активных клеток.
+     */
+    public ArrayList<Cell> getAllActiveCells() {
+        return allActiveCells;
+    }
+
+    /**
+     * Возврат неактивных клеток.
+     * @return массив неактивных клеток.
+     */
+    public ArrayList<Cell> getAllPassiveCells() {
+        return allPassiveCells;
+    }
+
+    /**
+     * Метод создания фигуры.
+     * @param figure массив фигур
+     */
+    public void createFigure(int[][] figure) {
+        Color color = getColor();
+        if (figure.length < 9) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    Cell cell = new Cell(j, i);
+                    if (figure[i][j] == 1) {
+                        cell.setActive(true);
+                        cell.setColorActiveCell(color);
+                        allActiveCells.add(cell);
+                    } else {
+                        cell.setActive(false);
+                        allPassiveCells.add(cell);
+                    }
+                    this.add(cell, j, i);
+                }
+            }
+        }
+    }
+
+    /**
+     * Получение рандомного цвета.
+     * @return цвет
+     */
+    private Color getColor() {
+        float r = rand.nextFloat();
+        float g = rand.nextFloat();
+        float b = rand.nextFloat();
+        return Color.color(r, g, b);
+    }
+
+    /**
+     * Метод задающий начальное положение.
+     */
+    public void setStartLayout() {
+        this.setLayoutX(START_LAYOUT_X);
+        this.setLayoutY(START_LAYOUT_Y);
     }
 }
