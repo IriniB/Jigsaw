@@ -1,6 +1,5 @@
-package com.example.hw5.View;
+package com.example.hw5.Model;
 
-import com.example.hw5.View.Cell;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.*;

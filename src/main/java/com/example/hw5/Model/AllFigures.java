@@ -1,7 +1,5 @@
 package com.example.hw5.Model;
 
-import com.example.hw5.View.Figure;
-
 import java.util.ArrayList;
 
 /**

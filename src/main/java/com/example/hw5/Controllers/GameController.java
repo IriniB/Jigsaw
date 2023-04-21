@@ -1,10 +1,10 @@
 package com.example.hw5.Controllers;
 
-import com.example.hw5.View.Field;
-import com.example.hw5.View.Figure;
+import com.example.hw5.Model.Field;
+import com.example.hw5.Model.Figure;
 import com.example.hw5.Model.AllFigures;
-import com.example.hw5.View.TimeLabel;
-import com.example.hw5.View.Cell;
+import com.example.hw5.Model.TimeLabel;
+import com.example.hw5.Model.Cell;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;

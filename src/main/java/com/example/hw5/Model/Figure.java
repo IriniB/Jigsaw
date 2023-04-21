@@ -1,4 +1,4 @@
-package com.example.hw5.View;
+package com.example.hw5.Model;
 
 import com.example.hw5.Controllers.GameController;
 import javafx.geometry.HPos;
