@@ -13,15 +13,15 @@ public class Cell extends Label {
     /**
      * Цвет ячейки в активном состоянии.
      */
-    public static Color COLOR_ACTIVE_CELL = Color.BLUE;
+    public Color COLOR_ACTIVE_CELL = Color.GREY;
     /**
      * Цвет ячейки в пассивном состоянии.
      */
-    public static final Color COLOR_PASSIVE_CELL = Color.WHITE;
+    public static final Color COLOR_PASSIVE_CELL = Color.BISQUE;
     /**
-     * Бэкграунд ячейки в активном состоянии (сразу запослнена).
+     * Бэкграунд ячейки в активном состоянии (сразу заполнена).
      */
-    public static final Background BACKGROUND_ACTIVE_CELL = new Background(new BackgroundFill(COLOR_ACTIVE_CELL, null, null));
+    public Background BACKGROUND_ACTIVE_CELL = new Background(new BackgroundFill(COLOR_ACTIVE_CELL, null, null));
     /**
      * Бэкграунд ячейки в неактивном состоянии.
      */
@@ -54,6 +54,20 @@ public class Cell extends Label {
         this.pozY = pozY;
         this.setMaxSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         this.setPrefSize(SIZE_X, SIZE_Y);
+    }
+
+    /**
+     * Конструктор ячейки.
+     * @param pozX координата по оси Х
+     * @param pozY координата по оси У
+     */
+    public Cell(int pozX, int pozY, Color color) {
+        this.pozX = pozX;
+        this.pozY = pozY;
+        this.setMaxSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        this.setPrefSize(SIZE_X, SIZE_Y);
+        COLOR_ACTIVE_CELL = color;
+        BACKGROUND_ACTIVE_CELL = new Background(new BackgroundFill(COLOR_ACTIVE_CELL, null, null));
     }
 
     /**

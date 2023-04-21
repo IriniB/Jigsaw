@@ -3,6 +3,7 @@ package com.example.hw5.Model;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 

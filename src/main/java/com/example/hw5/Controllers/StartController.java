@@ -27,6 +27,9 @@ public class StartController {
         stage.setResizable(false);
 
         stage.show();
+
+        Stage currentStage = (Stage) exitButton.getScene().getWindow();
+        currentStage.close();
     }
 
     @FXML

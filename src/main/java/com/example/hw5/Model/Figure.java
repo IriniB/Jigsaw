@@ -130,10 +130,10 @@ public class Figure extends GridPane {
         if (figure.length < 9) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    Cell cell = new Cell(j, i);
+                    Cell cell = new Cell(j, i, color);
                     if (figure[i][j] == 1) {
                         cell.setActive(true);
-                        cell.setColorActiveCell(color);
+                        //cell.setColorActiveCell(color);
                         allActiveCells.add(cell);
                     } else {
                         cell.setActive(false);
@@ -153,6 +153,7 @@ public class Figure extends GridPane {
         float r = rand.nextFloat();
         float g = rand.nextFloat();
         float b = rand.nextFloat();
+        System.out.println(Color.color(r, g, b).getBlue() + " " + b) ;
         return Color.color(r, g, b);
     }
 

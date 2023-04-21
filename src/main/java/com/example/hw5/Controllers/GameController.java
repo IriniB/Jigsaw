@@ -11,10 +11,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.util.Date;
 import java.util.Timer;
@@ -185,6 +182,8 @@ public class GameController {
                 Cell addCell = field.getCell(
                         (int)point2D.getX() + cell.getPozX(), (int)point2D.getY() + cell.getPozY());
                 addCell.setMouseTransparent(true);
+                addCell.COLOR_ACTIVE_CELL = cell.COLOR_ACTIVE_CELL;
+                addCell.BACKGROUND_ACTIVE_CELL = new Background(new BackgroundFill(cell.COLOR_ACTIVE_CELL, null, null));
                 addCell.setActive(true);
             }
             step++;
