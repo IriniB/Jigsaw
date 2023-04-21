@@ -1,21 +1,11 @@
-package com.example.hw5;
+package com.example.hw5.View;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import com.example.hw5.View.Cell;
 import javafx.geometry.HPos;
-import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Field {
     /**

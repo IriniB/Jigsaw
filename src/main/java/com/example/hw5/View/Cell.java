@@ -1,4 +1,4 @@
-package com.example.hw5;
+package com.example.hw5.View;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;

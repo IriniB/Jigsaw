@@ -1,5 +1,6 @@
-package com.example.hw5;
+package com.example.hw5.View;
 
+import com.example.hw5.Controllers.GameController;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
@@ -161,5 +162,46 @@ public class Figure extends GridPane {
     public void setStartLayout() {
         this.setLayoutX(START_LAYOUT_X);
         this.setLayoutY(START_LAYOUT_Y);
+    }
+
+    /**
+     * Метод, определяющий возможность разместить фигуру на поле.
+     * @param pozX позиция по оси Х
+     * @param pozY позиция по оси У
+     * @return true - если можно разместить, false - иначе
+     */
+    public boolean isPozAllCell(int pozX, int pozY) {
+        int x, y;
+        Field fieldTetris = GameController.getFieldTetris();
+        for (Cell cell :
+                allActiveCells) {
+            x = pozX + cell.getPozX();
+            y = pozY + cell.getPozY();
+            if (x < 0 || y < 0 || x > Field.SIZE_X - 1 || y > Field.SIZE_Y - 1) {
+                return false;
+            }
+            if (fieldTetris.isCellActive(x, y)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Метод, возвращающий координаты левого верхнего угла сетки фигуры.
+     * @return координата левого верхнего угла сетки фигуры
+     */
+    public Point2D getPoz() {
+        double x = this.getLayoutX();
+        double y = this.getLayoutY();
+        x /= Field.SIZE_CELL_ON_FIELD_X;
+        y /= Field.SIZE_CELL_ON_FIELD_Y;
+        if (x < 0) {
+            x -= 1;
+        }
+        if (y < 0) {
+            y -= 1;
+        }
+        return new Point2D(x, y);
     }
 }
