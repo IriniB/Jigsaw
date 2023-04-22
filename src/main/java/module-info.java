@@ -1,6 +1,8 @@
 module com.example.hw5 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
+    requires org.postgresql.jdbc;
 
 
     opens com.example.hw5 to javafx.fxml;

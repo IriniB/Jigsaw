@@ -18,6 +18,12 @@
             <Font name="AppleGothic Regular" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="exitButton" layoutX="256.0" layoutY="282.0" mnemonicParsing="false" onAction="#onExitButtonClick" text="Exito totalum" textFill="#14967d" />
+      <Label layoutX="250.0" layoutY="270.0" prefHeight="57.0" prefWidth="345.0" text="Input name" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="250.0">
+         <font>
+            <Font name="AppleGothic Regular" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="name" layoutX="220.0" layoutY="290.0"></TextField>
+      <Button fx:id="exitButton" layoutX="256.0" layoutY="330.0" mnemonicParsing="false" onAction="#onExitButtonClick" text="Exito totalum" textFill="#14967d" />
    </children>
 </AnchorPane>
