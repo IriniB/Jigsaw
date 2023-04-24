@@ -3,6 +3,7 @@ module com.example.hw5 {
     requires javafx.fxml;
     requires java.sql;
     requires org.postgresql.jdbc;
+    requires okhttp3;
 
 
     opens com.example.hw5 to javafx.fxml;
