@@ -3,7 +3,9 @@ package com.example.jigsawserver.game;
 import com.example.jigsawserver.figures.Figure;
 import com.example.jigsawserver.figures.FigureType;
 import com.example.jigsawserver.figures.Rotation;
-import jdk.jshell.spi.ExecutionControl;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +25,12 @@ public class JigsawServerController {
     private static Timer timer;
     private static GameStatus gameStatus = GameStatus.WAITING;
 
-    @PostMapping("/new-game")
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
+        return factory -> factory.setContextPath("/jigsaw");
+    }
+
+    @GetMapping("/new-game")
     public ResponseEntity<String> addPlayer() {
         UUID uuid = UUID.randomUUID();
         synchronized (offsets) {
