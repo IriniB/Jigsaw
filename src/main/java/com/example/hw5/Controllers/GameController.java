@@ -68,6 +68,12 @@ public class GameController {
      */
     public TimeLabel timeLabel;
 
+    private static final JigsawClientController clientController = new JigsawClientController();
+
+    public static JigsawClientController getClientController() {
+        return clientController;
+    }
+
     @FXML
     private TableView<LiderboardRow> tableUsers;
 
@@ -86,7 +92,8 @@ public class GameController {
     public void initialize() {
         startTime = new Date();
         setDragAndDrop(allFiguresTetris);
-        figureTetris = allFiguresTetris.getFigure();
+        //figureTetris = allFiguresTetris.getFigure();
+        figureTetris = clientController.getNextFigure();
         setDragAndDrop(figureTetris);
         anchorPaneField.getChildren().add(figureTetris);
         fieldTetris = new Field(gridPaneField);
@@ -102,7 +109,13 @@ public class GameController {
         anchorPaneField.getChildren().remove(figureTetris);
         figureTetris.setVisible(true);
         figureTetris.setStartLayout();
-        figureTetris = allFiguresTetris.getFigure();
+
+        figureTetris = clientController.getNextFigure();
+        if (figureTetris == null) {
+            onActionFinish();
+        }
+        setDragAndDrop(figureTetris);
+
         anchorPaneField.getChildren().add(figureTetris);
     }
 
@@ -217,7 +230,9 @@ public class GameController {
     public void onActionFinish() {
         // Останавливаем таймер и собираем строку с итогами игры.
         timerTimeLabel.cancel();
-        figureTetris.setMouseTransparent(true);
+        if (figureTetris != null) {
+            figureTetris.setMouseTransparent(true);
+        }
         String s = "Время игры:\n";
         s += labelTime.getText() + "\n";
         s += "Количество ходов:\n";
@@ -243,6 +258,8 @@ public class GameController {
         long seconds = gameTime.getTime() / 1000;
         DbController dbController = new DbController();
         dbController.insertResult(StartController.playerName, step, seconds);
+
+        clientController.endGame(new LiderboardRow(StartController.playerName, step, seconds));
     }
 
     /**
@@ -250,8 +267,20 @@ public class GameController {
      */
     @FXML
     public void onNewActionGame() {
+        if (!clientController.connect()) {
+            return;
+        }
+        if (!clientController.checkStart()) {
+            return;
+        }
+
         // Установка переменных на начальные значения.
         anchorPaneField.getChildren().remove(figureTetris);
+        figureTetris = clientController.getNextFigure();
+        if (figureTetris == null) {
+            return;
+        }
+
         gridPaneField.setOpacity(1);
         labelBackground.setVisible(false);
         labelMessage.setVisible(false);
@@ -259,14 +288,16 @@ public class GameController {
         leaderboardBtn.setVisible(false);
         buttonFinish.setVisible(true);
         tableUsers.setVisible(false);
+
         labelTime.setText("00:00:00");
         startTime = new Date();
         step = 0;
+
         allFiguresTetris = new AllFigures();
-        figureTetris = new Figure(10, 10);
         setDragAndDrop(allFiguresTetris);
-        figureTetris = allFiguresTetris.getFigure();
+
         setDragAndDrop(figureTetris);
+
         anchorPaneField.getChildren().add(figureTetris);
         fieldTetris = new Field(gridPaneField);
         fieldTetris.delActiveCell();

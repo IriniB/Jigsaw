@@ -7,7 +7,7 @@ import com.example.hw5.Model.response_figure.ResponseFigureType;
 
 public class FigureMapper {
     public static Figure fromResponseFigure(ResponseFigure responseFigure) {
-        int[][] figureCoords = getFigureCoords(responseFigure.figureType());
+        int[][] figureCoords = getFigureCoords(responseFigure.type());
         for (int i = 0; i < responseFigure.angle().ordinal(); i++) {
             figureCoords = AllFigures.rotate(figureCoords);
         }

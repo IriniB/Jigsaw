@@ -19,6 +19,15 @@ public class StartController {
     @FXML
     public void onStartButtonClick() throws IOException {
         playerName = name.getText();
+        if (!GameController.getClientController().connect()) {
+            System.out.println("Could not connect to server");
+            return;
+        }
+        if (!GameController.getClientController().checkStart()) {
+            System.out.println("Not enough players");
+            return;
+        }
+
         // Создание второго окна.
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("view.fxml"));
 

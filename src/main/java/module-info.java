@@ -13,4 +13,6 @@ module com.example.hw5 {
     opens com.example.hw5.Model to javafx.fxml;
     exports com.example.hw5.Controllers;
     opens com.example.hw5.Controllers to javafx.fxml;
+
+    opens com.example.hw5.Model.response_figure to com.google.gson;
 }
