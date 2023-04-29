@@ -110,7 +110,7 @@ public class AllFigures {
      * @param figure фигура
      * @return повернутая фигура
      */
-    public int[][] rotate(int[][] figure) {
+    public static int[][] rotate(int[][] figure) {
         int[][] rotate_figure = new int[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
