@@ -41,6 +41,11 @@ public class JigsawServerController {
         }
         return new ResponseEntity<>(uuid.toString(), HttpStatus.OK);
     }
+    
+    @GetMapping("/can-start")
+    public ResponseEntity<Boolean> canStartGame() {
+        return new ResponseEntity<>(offsets.size() >= 2, HttpStatus.OK);
+    }
 
     @GetMapping("/figure")
     public ResponseEntity<Figure> nextFigure(@RequestParam(name = "code") String code) {
