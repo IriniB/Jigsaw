@@ -1,19 +1,24 @@
 package com.example.hw5.Controllers;
 
-import com.example.hw5.Model.Field;
-import com.example.hw5.Model.Figure;
-import com.example.hw5.Model.AllFigures;
-import com.example.hw5.Model.TimeLabel;
-import com.example.hw5.Model.Cell;
+import com.example.hw5.Model.*;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.Timer;
 
 /**
@@ -29,7 +34,7 @@ public class GameController {
     @FXML
     public Pane paneFigures;
     @FXML
-    public Button buttonFinish, buttonNewGame, buttonExit;
+    public Button buttonFinish, buttonNewGame, buttonExit, leaderboardBtn;
     @FXML
     public AnchorPane anchorPaneField;
     @FXML
@@ -62,6 +67,18 @@ public class GameController {
      * Лейбл для таймера.
      */
     public TimeLabel timeLabel;
+
+    @FXML
+    private TableView<LiderboardRow> tableUsers;
+
+    @FXML
+    private TableColumn<LiderboardRow, String> nameColumn;
+
+    @FXML
+    private TableColumn<LiderboardRow, String> movesColumn;
+
+    @FXML
+    private TableColumn<LiderboardRow, String> secondsColumn;
 
     /**
      * Инициализация игры.
@@ -211,6 +228,21 @@ public class GameController {
         labelMessage.setVisible(true);
         buttonFinish.setVisible(false);
         hBoxOnButton.setVisible(true);
+        leaderboardBtn.setVisible(true);
+        tableUsers.setVisible(false);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        TimeZone gmt = TimeZone.getTimeZone("GMT");
+        sdf.setTimeZone(gmt);
+        Date gameTime = new Date();
+        try {
+            gameTime = sdf.parse(labelTime.getText());
+        } catch (ParseException exception){
+            System.out.println(exception.toString());
+        }
+        long seconds = gameTime.getTime() / 1000;
+        DbController dbController = new DbController();
+        dbController.insertResult(StartController.playerName, step, seconds);
     }
 
     /**
@@ -224,7 +256,9 @@ public class GameController {
         labelBackground.setVisible(false);
         labelMessage.setVisible(false);
         hBoxOnButton.setVisible(false);
+        leaderboardBtn.setVisible(false);
         buttonFinish.setVisible(true);
+        tableUsers.setVisible(false);
         labelTime.setText("00:00:00");
         startTime = new Date();
         step = 0;
@@ -249,5 +283,21 @@ public class GameController {
     public void onActionExit() {
         Platform.exit();
         System.exit(0);
+    }
+
+
+    public void onLeaderboardBtnClick() {
+        DbController dbController = new DbController();
+        ArrayList<LiderboardRow> data = dbController.getLeaderboard();
+        ObservableList<LiderboardRow> usersData = FXCollections.observableArrayList();
+        usersData.addAll(data);
+
+        nameColumn.setCellValueFactory(new PropertyValueFactory<LiderboardRow, String>("name"));
+        movesColumn.setCellValueFactory(new PropertyValueFactory<LiderboardRow, String>("moves"));
+        secondsColumn.setCellValueFactory(new PropertyValueFactory<LiderboardRow, String>("seconds"));
+
+        tableUsers.setItems(usersData);
+        System.out.println(usersData);
+        tableUsers.setVisible(true);
     }
 }

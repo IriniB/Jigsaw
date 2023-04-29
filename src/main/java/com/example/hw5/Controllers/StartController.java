@@ -6,15 +6,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class StartController {
+    public TextField name;
+    public static String playerName;
     @FXML
     private Button exitButton;
     @FXML
     public void onStartButtonClick() throws IOException {
+        playerName = name.getText();
         // Создание второго окна.
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("view.fxml"));
 
