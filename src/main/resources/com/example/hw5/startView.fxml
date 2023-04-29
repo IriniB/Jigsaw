@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.hw5.Controllers.StartController">
+   <children>
+      <Label layoutX="128.0" layoutY="107.0" prefHeight="57.0" prefWidth="345.0" text="Welcome to Tetris!" AnchorPane.bottomAnchor="236.0" AnchorPane.leftAnchor="128.0" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="107.0">
+         <font>
+            <Font name="AppleGothic Regular" size="39.0" />
+         </font>
+      </Label>
+      <Button layoutX="220.0" layoutY="200.0" mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="45.0" prefWidth="161.0" text="Start Adventure" textFill="#5c12a3">
+         <font>
+            <Font name="AppleGothic Regular" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="exitButton" layoutX="256.0" layoutY="282.0" mnemonicParsing="false" onAction="#onExitButtonClick" text="Exito totalum" textFill="#14967d" />
+   </children>
+</AnchorPane>
