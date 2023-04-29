@@ -34,7 +34,11 @@ public class Figure extends GridPane {
     private ArrayList<Cell> allActiveCells = new ArrayList<>();
     // Массив неактивных клеток.
     private ArrayList<Cell> allPassiveCells = new ArrayList<>();
+
     private Random rand = new Random();
+    private static final int DEFAULT_POSITION_X = 10;
+    private static final int DEFAULT_POSITION_Y = 10;
+
 
 
     /**
@@ -42,6 +46,7 @@ public class Figure extends GridPane {
      * @param pozX координата по оси Х
      * @param pozY координата по оси У
      */
+    // TODO refactor
     public Figure(int pozX, int pozY) {
         this.pozX = pozX;
         this.pozY = pozY;
@@ -60,6 +65,7 @@ public class Figure extends GridPane {
      * @param pozY координата по оси У
      * @param figure фигура
      */
+    // TODO refactor
     public Figure(int pozX, int pozY, int[][] figure) {
         this.pozX = pozX;
         this.pozY = pozY;
