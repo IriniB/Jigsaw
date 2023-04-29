@@ -65,18 +65,12 @@ public class JigsawServerController {
 
     @PostMapping("/stop")
     public void stopGame(@RequestParam(name = "code") String code) {
-        // TODO save statistics
         offsets.remove(code);
         if (offsets.isEmpty()) {
             timer.cancel();
             sequence.clear();
             gameStatus = GameStatus.WAITING;
         }
-    }
-
-    @GetMapping("/leaderboard")
-    public void getLeaderboard(){
-        // TODO db work
     }
 
     private void setTimer() {
