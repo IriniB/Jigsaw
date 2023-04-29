@@ -87,7 +87,7 @@ public class JigsawServerController {
                 offsets.forEach((k, v) -> stopGame(k));
                 System.out.println("game finished");
             }
-        }, 3*1000*10);
+        }, 3*1000*60);
     }
 
     private Figure generateFigure() {
