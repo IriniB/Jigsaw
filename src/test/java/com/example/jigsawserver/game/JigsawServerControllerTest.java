@@ -12,13 +12,6 @@ import java.util.concurrent.ConcurrentMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JigsawServerControllerTest {
-
-    // given
-
-    // when
-
-    // then
-
     @Test
     void shouldAddPlayer() {
         // given
